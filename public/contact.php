@@ -64,95 +64,62 @@ if(!empty($input)) {
   }
 }
 
-?>
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Jason Snider</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./dist/css/main.css" type="text/css">
-  </head>
-  <body>
-    <header>
-      <span class="logo">My Website</span>
-      <a id="toggleMenu">Menu</a>
-      <nav>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="resume.html">Resume</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </nav>
-    </header>
-    <main>
+$message = (!empty($message)?$message:null);
 
-      <h1>Contact Jason Snider</h1>
+$pageTitle = "Contact - Jason Snider";
+$description = "Hello, send me a note.";
+$content = <<<EOT
+  <main>
 
-      <?php echo (!empty($message)?$message:null);  ?>
+    <h1>Contact Jason Snider</h1>
+    {$message}
+    <form action="contact.php" method="POST">
+      
+      <input type="hidden" name="subject" value="New submission!">
+      
+      <div>
+        <label for="name">Name</label>
+        <input 
+          id="name" 
+          type="text" 
+          name="name" 
+          value="{$valid->userInput('name')}">
 
-      <form action="contact.php" method="POST">
+        <div class="message-error">
+          {$valid->error('name')}
+        </div>
+      </div>
+
+      <div>
+        <label for="email">Email</label>
+        <input 
+          id="email" 
+          type="text" 
+          name="email" 
+          value="{$valid->userInput('email')}"> 
+
+        <div class="message-error">
+          {$valid->error('email')}
+        </div>
+      </div>
+
+      <div> 
         
-        <input type="hidden" name="subject" value="New submission!">
-        
-        <div>
-          <label for="name">Name</label>
-          <input 
-            id="name" 
-            type="text" 
-            name="name" 
-            value="<?php echo $valid->userInput('name'); ?>">
+        <label for="message">Message</label>
 
-          <div class="message-error">
-            <?php echo $valid->error('name'); ?>
-          </div>
+        <textarea id="message" name="message">{$valid->userInput('message')}</textarea>
+
+        <div class="message-error">
+          {$valid->error('message')}
         </div>
+      </div>
 
-        <div>
-          <label for="email">Email</label>
-          <input 
-            id="email" 
-            type="text" 
-            name="email" 
-            value="<?php echo $valid->userInput('email'); ?>"> 
+      <div>
+        <input type="submit" value="Send">
+      </div>
 
-          <div class="message-error">
-            <?php echo $valid->error('email'); ?>
-          </div>
-        </div>
+    </form>
+  </main>
+EOT;
 
-        <div> 
-          
-          <label for="message">Message</label>
-
-          <textarea id="message" name="message"><?php echo $valid->userInput('message'); ?></textarea>
-
-          <div class="message-error">
-            <?php echo $valid->error('message'); ?>
-          </div>
-        </div>
-
-        <div>
-          <input type="submit" value="Send">
-        </div>
-
-      </form>
-    </main>
-    <script>
-
-        var toggleMenu = document.getElementById('toggleMenu');
-        var nav = document.querySelector('nav');
-        toggleMenu.addEventListener(
-          'click',
-          function(){
-            if(nav.style.display=='block'){
-              nav.style.display='none';
-            }else{
-              nav.style.display='block';
-            }
-          }
-        );
-  
-      </script>
-  </body>
-</html>
+require '../core/layout.php';
